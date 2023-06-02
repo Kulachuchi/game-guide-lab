@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <style>
+        img.post-image-thumbnail {
+        width: 10%;
+    }
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        margin-top: 50px; /* Move down the recent posts container */
+    }
+    .post-button {
+        margin-top: 20px; /* Move down the create post button */
+    }
+    </style>
+    </head>
+    <body style="background-color: gray">
+     <!--Navigation bar to help users navigate through different tabs or pages of the app-->
+    <nav>
+    <ul class="topnav">
+        <li><a class="active" href="#viewposts">Home</a></li>
+        <li><a href="newpost.html">Post</a></li>
+        <li class="right"><a href="login.html">Logout</a></li>
+        <li class="right"><a href="profile.html">Profile</a></li>
+        
+    </ul>
+    </nav>
+
+    <div class="center"> <!--Tried aligning and fitting in the posts into the screen but could not get all the posts to fit in-->
+    <h2>Recent Posts</h2> <!-- Recent posts container -->
+    <div id="recent-posts" class="home-recent-posts"></div> <!-- Container for recent posts -->
+    <div class="post-button">
+        <button onclick="newPostPage()">Create Post</button> <!-- Create post button -->
+    </div>
+
+    <!--Script code is originally from Dave Webb-->
+    <script>
+        let recentPosts = [];
+        let recentPostsContainer = document.querySelector('#recent-posts');
+
+        // Fetch recent posts from the server
+        fetch('/getposts')
+            .then(response => response.json())
+            .then(fetchedData => {
+                recentPosts = fetchedData.posts;
+                console.log(fetchedData.posts);
+                handleServerData();
+            });
+
+        function handleServerData() {
+            recentPostsContainer.innerHTML = '';
+
+            // Iterate over each recent post and create HTML elements
+            recentPosts.forEach(function (post) {
+                //Added the function to add a title to the posts
+                let li = document.createElement('li');
+                let liTitle = document.createElement('p');
+                liTitle.textContent = post.title;
+                let liText = document.createElement('p');
+                liText.textContent = `${post.content} (by: ${post.postedBy}) [Likes:${post.likes}]`;
+
+                let button = document.createElement('button');
+                button.textContent = 'Like';
+                button.addEventListener('click', processLike);
+                button.setAttribute('data-post-id', post._id.toString());
+
+                let viewButton = document.createElement('button');
+                viewButton.textContent = 'View and Comment';
+                viewButton.addEventListener('click', processView);
+                viewButton.setAttribute('view-post-id', post._id.toString());
+
+                li.appendChild(liTitle);
+
+                if (post.imagePath) {
+                    let postImage = document.createElement('img');
+                    postImage.src = post.imagePath;
+                    postImage.alt = "temporary alt tag";
+                    postImage.classList.add("post-image-thumbnail");
+                    li.appendChild(postImage);
+                } else {
+                    let noPostImage = document.createElement('p');
+                    noPostImage.textContent = "alas, no image!";
+                    li.appendChild(noPostImage);
+                }
+
+                li.appendChild(liText);
+                li.appendChild(button);
+                li.appendChild(viewButton);
+
+                let comments = post.comments;
+                if (comments.length > 0) {
+                    let commentsUL = document.createElement('ul');
+                    comments.forEach(function (comment) {
+                        let commentLi = document.createElement('li');
+                        let commentLiText = document.createElement('p');
+                        commentLiText.textContent = `${comment.message} (by: ${comment.user}) [Likes:${comment.likes}]`;
+
+                        commentLi.appendChild(commentLiText);
+                        commentsUL.appendChild(commentLi);
+                    });
+                    li.appendChild(commentsUL);
+                }
+
+                recentPostsContainer.appendChild(li); // Append the post to the recent posts container
+            });
+        }
+
+        function processLike(event) {
+            let likedPostId = event.target.getAttribute("data-post-id");
+            let options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    likedPostID: likedPostId
+                })
+            };
+
+            // Send a request to the server to process the like
+            fetch('/like', options)
+                .then(response => response.json())
+                .then(fetchedData => {
+                    recentPosts = fetchedData.posts;
+                    handleServerData(); // Update the recent posts after processing the like
+                });
+        }
+
+        function processView(event) {
+            let viewPostId = event.target.getAttribute("view-post-id");
+            console.log(window.location.origin + '/viewpost.html?post=' + viewPostId);
+            window.location = window.location.origin + '/viewpost.html?post=' + viewPostId; // Redirect to the view post page
+        }
+
+        function newPostPage() {
+            window.location = window.location.origin + '/newpost.html'; // Redirect to the create post page
+        }
+    </script>
+</body>
+</html>

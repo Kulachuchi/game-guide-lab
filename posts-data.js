@@ -1,0 +1,18 @@
+////Code source is from our instructor, Dave Webb
+const posts=[]
+
+function addNewPost(userID, post){
+    let myPost={
+        postedBy: userID,
+        content: post.content,
+        likes: 0,
+        time: Date.now()
+    }
+    posts.unshift(myPost)
+}
+
+function getPosts(n=3){
+    return posts.slice(0,n)
+}
+
+module.exports={addNewPost, getPosts}

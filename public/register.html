@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<!--The CSS style code for the login form-->
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    form {
+        margin: 0 auto;
+        width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+    input[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #555;
+    }
+</style>
+<body>
+    <header>
+         <!--Navigation bar to help users navigate through different tabs or pages of the app-->
+    <nav>
+        <ul class="topnav">
+            <li class="right"><a class="active" href="#register">Register</a></li>
+            <li class="right"><a href="login.html">Login</a></li>
+        </nav>
+        </ul>
+    </header>
+<h1>Registration</h1>
+<form action="/register" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password"><br><br>
+    <input type="submit" value="Submit">
+</form>
+<p style="text-align: center;">Already have an account? <a href="login.html">Login Here</a></p>
+<script src="reglog.js"></script>
+</body>
+</html>

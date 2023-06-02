@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+ <link rel="stylesheet" href="style.css">
+</head>
+<body bgcolor="gray">
+ <header>
+   <!--Navigation bar to help users navigate through different tabs or pages of the app-->
+ <nav>
+ <ul class="topnav">
+ <li><a href="viewposts.html">Home</a></li>
+ <li><a href="newpost.html">Post</a></li>
+ <li class="right"><a href="login.html">Logout</a></li>
+ <li class="right"><a class="active" href="#profile">Profile</a></li>
+</nav>
+ </ul>
+
+ </header>
+    <div class="row">
+        <div class="column devright">
+            <h1>Profile </h1>
+              <h3>Username: </h3> <!--This section is supposed to be for users to edit with the database function but could not implement the feature in-->
+              <!--The drag and drop api to help with showing different profile pictures. The function to make it appear could not be implemented.
+              The feature to save any images dropped in the section could not be done properly as well.
+              The styling of the drag and drop api feature should be smaller and move to the right but had some issues trying to reposition it.-->
+              <div id="dragger_wrapper"
+                <div id="dragger">
+                    <div class="icon"><i class="fa-solid fa-images"></i></div>
+                    <h2 id="drag-text">Drag and Drop File</h2>
+                    <h3>Or</h3> <button class="browseFile" id="browseFile">Browse File</button> <input type="file" hidden id="fileInputField" />
+                </div>
+                <div id="fileName"> </div>
+            </div>
+            <script src="image.js"></script>
+      </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!--This page of the app is what the app would look like if the posting feature worked-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Social Uploads</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+        .upload-box:hover {
+            border-color: #888;
+        }
+        .upload-box input {
+            display: none;
+        }
+        .upload-box label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .post {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+        .post img {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .actions button.likes {
+            color: blue;
+        }
+        .actions button.unlikes {
+            color: red;
+        }
+        .actions button.Share {
+            color: #0fef86;
+        }
+        .actions button:hover {
+            text-decoration: underline;
+        }
+        .comments {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .comment {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Social Uploads</h1>
+        <div class="upload-box">
+            <label for="photo-input">Choose a Photo</label>
+            <input type="file" id="photo-input">
+        </div>
+        <div id="feed">
+            <!-- Posts will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        // Array to store posts
+        let posts = [];
+
+        // Function to handle photo upload
+        document.getElementById("photo-input").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                const newPost = {
+                    image: imageUrl,
+                    likes: 0,
+                    comments: []
+                };
+                posts.push(newPost);
+                displayFeed();
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Function to display the feed
+        function displayFeed() {
+            const feedDiv = document.getElementById("feed");
+            feedDiv.innerHTML = ""; // Clear the feed
+
+            for (const post of posts) {
+                const postElement = document.createElement("div");
+                postElement.classList.add("post");
+
+                const imageElement = document.createElement("img");
+                imageElement.src = post.image;
+                postElement.appendChild(imageElement);
+
+                const actionsElement = document.createElement("div");
+                actionsElement.classList.add("actions");
+
+                const likeButton = document.createElement("button");
+                likeButton.textContent = "Like";
+                likeButton.addEventListener("click", function() {
+                    post.likes++;
+                    displayFeed();
+                });
+                actionsElement.appendChild(likeButton);
+
+                const unlikeButton = document.createElement("button");
+                unlikeButton.textContent = "Unlike";
+                unlikeButton.addEventListener("click", function() {
+                    if (post.likes > 0) {
+                        post.likes--;
+                        displayFeed();
+                    }
+                });
+                actionsElement.appendChild(unlikeButton);
+
+                const shareButton = document.createElement("button");
+                shareButton.textContent = "Share";
+                shareButton.addEventListener("click", function() {
+                    // Implement share functionality
+                });
+                actionsElement.appendChild(shareButton);
+
+                postElement.appendChild(actionsElement);
+
+                const commentsElement = document.createElement("div");
+                commentsElement.classList.add("comments");
+
+                for (const comment of post.comments) {
+                    const commentElement = document.createElement("div");
+                    commentElement.classList.add("comment");
+                    commentElement.textContent = comment;
+                    commentsElement.appendChild(commentElement);
+                }
+
+                const commentInput = document.createElement("input");
+                commentInput.setAttribute("type", "text");
+                commentInput.setAttribute("placeholder", "Add a comment");
+                commentsElement.appendChild(commentInput);
+
+                const commentButton = document.createElement("button");
+                commentButton.textContent = "Comment";
+                commentButton.addEventListener("click", function() {
+                    const commentText = commentInput.value;
+                    if (commentText.trim() !== "") {
+                        post.comments.push(commentText);
+                        displayFeed();
+                        commentInput.value = "";
+                    }
+                });
+                commentsElement.appendChild(commentButton);
+
+                postElement.appendChild(commentsElement);
+
+                feedDiv.appendChild(postElement);
+            }
+        }
+    </script>
+</body>
+</html>

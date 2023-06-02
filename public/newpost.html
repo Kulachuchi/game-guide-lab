@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+ <link rel="stylesheet" href="style.css">
+</head>
+<style>
+  /*Styling for the form to create the post*/
+    form {
+      width: 50%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #eee;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      background-color: #808080;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #0062cc;
+    }
+    .post {
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .post h2 {
+        margin-top: 0;
+      }
+      .post p {
+        margin-bottom: 0;
+      }
+  </style>
+<body bgcolor="gray">
+ <header>
+   <!--Navigation bar to help users navigate through different tabs or pages of the app-->
+<nav>
+ <ul class="topnav">
+ <li><a href="viewposts.html">Home</a></li>
+ <li><a class="active" href="#newpost">Post</a></li>
+ <li class="right"><a href="login.html">Logout</a></li>
+ <li class="right"><a href="profile.html">Profile</a></li>
+ </ul>
+</nav>
+ </header>
+ <!--The post submit button works the same as the original source from our instructor's samples-->
+ <!--The form have been changed to stick with the original idea for the project-->
+ <h1>Create a New Post</h1>
+  <form action="/newpost" method="POST" id="postform" enctype="multipart/form-data">
+    <label>Title</label>
+    <input type="text" id="title" name="title" placeholder="Add title..."><br>
+    <label>Content</label>
+    <textarea name="content" form="postform" rows="20" cols="50" placeholder="Enter text here..."></textarea>
+    <input type="file" name="myImage" accept="image/*" />
+    <button type="submit" value="Post">Post</button>
+</form>
+    
+	<script></script>
+</body>
+</html>

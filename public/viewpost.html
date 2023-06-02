@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(82, 115, 146);
+        }
+        #post {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #post-img {
+            width: 30%;
+        }
+        #post-message {
+            margin-left: 10px;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        #comments-section {
+            margin-bottom: 20px;
+            border: 1px solid #131010;
+            padding: 10px;
+        }
+        #post-comments {
+            margin-bottom: 10px;
+        }
+        #comment-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            border: 1px rgb(18, 5, 5);
+            padding: 10px;
+        }
+        #message {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #2d2c26;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .comments-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .comments-content-label {
+            font-weight: bold;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+     <!--Navigation bar to help users navigate through different tabs or pages of the app-->
+    <nav>
+        <div>
+            <ul class="topnav">
+                <li><a href="viewposts.html">Home</a></li>
+                <li><a href="newpost.html">Post</a></li>
+
+                
+                <li><a href="upload.html">Uploads</a></li>
+            </ul>
+        </div>
+
+        <!-- <div>
+            <span class="comments-label">Comments:</span>
+            <a href="#comments-section">Go to Comments</a>
+        </div>-->
+        
+        <div>
+            <ul class="topnav">
+                <li class="right"><a href="login.html">Logout</a></li>
+                <li class="right"><a href="profile.html">Profile</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Centered Container -->
+    <div class="center">
+        <!-- Post Section -->
+        <div id="post">
+            <img id="post-img" src="" alt="">
+            <p><span class="comments-content-label">Contents:</span><span id="post-message"></span></p>
+        </div>
+
+        <!-- Comments Section -->
+        <div id="comments-section">
+            <label class="comments-label"><b>Comments:</b></label>
+            <div id="post-comments"></div>
+        </div>
+
+        <!-- Comment Box Section -->
+        <form id="comment-form" action="/comment" method="POST">
+            <textarea type="text" id="message" name="message" rows="5" cols="50" placeholder="Add comment..."></textarea>
+            <input type="submit" value="Post Comment">
+        </form>
+    </div>
+
+    <!--Script code is originally from Dave Webb-->
+    <script>
+        //get js pointers to the html elements
+        let postImage = document.querySelector('#post-img')
+        let postMessage = document.querySelector('#post-message')
+        let postComments = document.querySelector('#post-comments')
+
+        //get the postid from the url query string
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString);
+        let selectedPost = urlParams.get("post")
+
+        let form = document.querySelector("#comment-form")
+        //add a hidden form field with the postid in it
+        let hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "postid");
+        hiddenField.setAttribute("value", selectedPost);
+        form.appendChild(hiddenField);
+
+
+        // Send comment form data as a post request with fetch
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ post: selectedPost })
+        }
+        fetch('/getonepost', options)
+            .then(response => response.json())
+            .then(serverResponse => renderPost(serverResponse))
+
+
+        //render the retrieved post data in html
+        function renderPost(postData) {
+            console.log(postData)
+
+            // show image if present
+            if (postData.post.imagePath) {
+                postImage.src = postData.post.imagePath
+                postImage.alt = "temporary alt tag"
+                postImage.classList.add("cl-post-image")
+            } else {
+                //render a null image?
+            }
+            postMessage.innerText = postData.post.content
+            let comments = postData.post.comments
+            if (comments.length > 0) {
+                //add a list of comments
+                //Tried adding in the title for the post but could not add it in properly
+                let commentsUL = document.createElement('ul')
+                comments.forEach(function (comment) {
+                    let commentLi = document.createElement('li')
+                    let commentLiText = document.createElement('p')
+                    commentLiText.textContent = `${comment.message} (by: ${comment.user}) [likes:${comment.likes}]`
+                    //add like button and code to handle like later
+                    commentLi.appendChild(commentLiText)
+                    commentsUL.appendChild(commentLi)
+                })
+                postComments.appendChild(commentsUL)
+            }
+        }
+
+    </script>
+
+</body>
+</html>
